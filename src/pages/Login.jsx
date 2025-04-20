@@ -1,15 +1,35 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [state, setState] = useState("Sign Up");
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (state === "Sign Up") {
+      if (!name || !number || !email || !password) {
+        alert("Please fill in all fields to create an account.");
+        return;
+      }
+      // Simulate signup logic (replace with API call)
+      navigate("/otp", { state: { email, number, flow: "signup" } });
+    } else {
+      if (!email || !password) {
+        alert("Please fill in email and password to login.");
+        return;
+      }
+      // Simulate login logic (replace with API call)
+      navigate("/dashboard");
+    }
+  };
 
   return (
-    <form className="min-h-[80vh] flex items-center">
+    <form onSubmit={handleSubmit} className="min-h-[80vh] flex items-center">
       <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-zinc-600 text-sm shadow-lg">
         <p className="text-2xl font-semibold">
           {state === "Sign Up" ? "Create Account" : "Login"}
@@ -61,27 +81,32 @@ export default function Login() {
             required
           />
         </div>
-        <button className="bg-blue-500 text-white w-full py-2 rounded-md text-base">
+
+        <button
+          type="submit"
+          className="bg-blue-500 text-white w-full py-2 rounded-md text-base cursor-pointer hover:bg-blue-600 transition-colors duration-300"
+        >
           {state === "Sign Up" ? "Create Account" : "Login"}
         </button>
+
         {state === "Sign Up" ? (
           <p>
             Already have an account?{" "}
             <span
               onClick={() => setState("Login")}
-              className="text-blue-500 underline cursor-pointer"
+              className="text-blue-500 underline cursor-pointer hover:text-blue-700"
             >
               Login here
             </span>
           </p>
         ) : (
           <p>
-            Create an new account?{" "}
+            Create a new account?{" "}
             <span
               onClick={() => setState("Sign Up")}
-              className="text-blue-500 underline cursor-pointer"
+              className="text-blue-500 underline cursor-pointer hover:text-blue-700"
             >
-              click here
+              Click here
             </span>
           </p>
         )}
