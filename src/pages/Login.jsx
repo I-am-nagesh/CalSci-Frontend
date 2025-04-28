@@ -1,30 +1,42 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [state, setState] = useState("Sign Up");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
+  // const [number, setNumber] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  //getting register and login functions from authcontext
+  const { register, login } = useAuth();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (state === "Sign Up") {
-      if (!name || !number || !email || !password) {
+      if (!name || !email || !password) {
         alert("Please fill in all fields to create an account.");
         return;
       }
-      // Simulate signup logic (replace with API call)
-      navigate("/otp", { state: { email, number, flow: "signup" } });
+      try {
+        await register({ email, password, name });
+        navigate("/dashboard");
+      } catch (error) {
+        alert("registration failed");
+      }
     } else {
       if (!email || !password) {
         alert("Please fill in email and password to login.");
         return;
       }
-      // Simulate login logic (replace with API call)
-      navigate("/dashboard");
+      try {
+        await login({ email, password });
+        navigate("/dashboard");
+      } catch (error) {
+        alert("Login failed");
+      }
     }
   };
 
@@ -47,7 +59,7 @@ export default function Login() {
                 required
               />
             </div>
-            <div className="w-full">
+            {/* <div className="w-full">
               <p>Phone Number</p>
               <input
                 className="border border-zinc-300 rounded-lg shadow-lg w-full p-2 mt-1"
@@ -56,7 +68,7 @@ export default function Login() {
                 value={number}
                 required
               />
-            </div>
+            </div> */}
           </>
         )}
 

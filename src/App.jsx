@@ -1,24 +1,24 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
-import OTP from "./pages/OTP";
-import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Login from './pages/Login'; 
+import Dashboard from './pages/Dashboard'; 
+import Navbar from './components/Navbar'; 
+import Home from './pages/Home';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div>
+    <Router>
+      <AuthProvider>
         <Navbar />
-        <main>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/otp" element={<OTP />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </AuthProvider>
+    </Router>
   );
 }
 
 export default App;
+
